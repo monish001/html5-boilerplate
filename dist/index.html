@@ -43,14 +43,44 @@
       redrawMeme(window.imageSrc, window.topLineText, window.bottomLineText);
     }
 
+    function greenify(ctx, canvasWidth, canvasHeight, frequency) {
+      var imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+      var nPixels = imageData.data.length / 4;
+      for(var index=0; index<nPixels; index++){
+        if((index)%frequency === 0){
+          imageData.data[index*4] = 0; // r
+          imageData.data[index*4 + 1] = 255; // g
+          imageData.data[index*4 + 2] = 0; // b
+          imageData.data[index*4 + 3] = 255; // alpha
+        }
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+    }
+
+    function grayscalify(ctx, canvasWidth, canvasHeight){
+      var imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+      var nPixels = imageData.data.length / 4;
+      for(var index=0; index<nPixels; index++){
+        var grayAvg = imageData.data[index*4 + 0] + imageData.data[index*4 + 1] + imageData.data[index*4 + 2];
+        imageData.data[index*4 + 0] = imageData.data[index*4 + 1] = imageData.data[index*4 + 2] = grayAvg;
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+    }
+
     function redrawMeme(image, topLine, bottomLine) {
-      // Get Canvas2DContext
-      var canvasWidth = 500;
-      var canvasHeight = 500;
       var canvas = document.querySelector('canvas');
+      var canvasWidth = canvas.width;
+      var canvasHeight = canvas.height;
+      // Get Canvas2DContext
       var ctx = canvas.getContext("2d");
 
       ctx.drawImage(image, 0, 0, canvasWidth, canvasHeight);
+
+      greenify(ctx, canvasWidth, canvasHeight, 10);
+
+      //grayscalify(ctx, canvasWidth, canvasHeight);
 
       ctx.font = '30pt Impact';
       ctx.textAlign = "center";
