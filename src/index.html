@@ -45,9 +45,29 @@
 
     function redrawMeme(image, topLine, bottomLine) {
       // Get Canvas2DContext
+      var canvasWidth = 500;
+      var canvasHeight = 500;
       var canvas = document.querySelector('canvas');
       var ctx = canvas.getContext("2d");
-      // Your code here
+
+      ctx.drawImage(image, 0, 0, canvasWidth, canvasHeight);
+
+      ctx.font = '30pt Impact';
+      ctx.textAlign = "center";
+      ctx.fillStyle = 'white';
+      var cHalfWidth = canvasWidth/2;
+      ctx.strokeStyle = 'black';
+      ctx.lineWidth = 3;
+
+      if(topLine){
+        ctx.fillText(topLine, cHalfWidth, 50);
+        ctx.strokeText(topLine, cHalfWidth, 50);
+      }
+
+      if(bottomLine){
+        ctx.fillText(bottomLine, cHalfWidth, 450);
+        ctx.strokeText(bottomLine, cHalfWidth, 450);
+      }
     }
 
     function saveFile() {
@@ -56,8 +76,6 @@
 
 
     function handleFileSelect(evt) {
-      var canvasWidth = 500;
-      var canvasHeight = 500;
       var file = evt.target.files[0];
 
 
